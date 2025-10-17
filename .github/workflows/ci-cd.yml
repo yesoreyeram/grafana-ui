@@ -120,12 +120,19 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: plugin-build-artifacts
-          path: ./plugin-dist
-      - name: Prepare plugin directory
+          path: ./grafana-plugins/yesoreyeram-ui-datasource
+      - name: Verify plugin files
         run: |
-          mkdir -p ./grafana-plugins/yesoreyeram-ui-datasource
-          cp -r ./plugin-dist/* ./grafana-plugins/yesoreyeram-ui-datasource/
+          echo "Listing plugin directory contents:"
           ls -la ./grafana-plugins/yesoreyeram-ui-datasource/
+          echo ""
+          echo "Checking for required files:"
+          if [ -f "./grafana-plugins/yesoreyeram-ui-datasource/module.js" ]; then
+            echo "✓ module.js found"
+          else
+            echo "✗ module.js not found"
+            exit 1
+          fi
       - name: Start Grafana container
         run: |
           docker run -d \
