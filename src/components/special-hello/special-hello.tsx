@@ -1,7 +1,4 @@
-// Special Hello Component
-
 import React, { type PropsWithChildren, type ReactElement } from "react";
-
 import { Hello } from "@/components/hello/hello";
 
 type Props = { message: string };

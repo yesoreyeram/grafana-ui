@@ -1,29 +1,27 @@
-// Hello Grafana Component
+"use client";
 
 import React, {
   useState,
   type PropsWithChildren,
   type ReactElement,
 } from "react";
-import { Button, Modal, Stack } from "@grafana/ui";
-
+import { Stack, Button, Modal, Icon } from "@grafana/ui";
 import { VerySpecialHello } from "@/components/very-special-hello/very-special-hello";
 
-type Props = { message: string };
-
-export const HelloGrafana: (
-  props: PropsWithChildren<Props>
-) => ReactElement = ({ message }) => {
+export const HelloGrafana: (props: PropsWithChildren) => ReactElement = () => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <Stack>
-      <Button onClick={() => setIsOpen(true)}>Hello</Button>
+      <Button onClick={() => setIsOpen(true)}>
+        <Icon name="ai-sparkle" />
+        &nbsp; Hello
+      </Button>
       <Modal
         title={"Hello Grafana Component"}
         isOpen={isOpen}
         onDismiss={() => setIsOpen(false)}
       >
-        <VerySpecialHello message={`${message}`} />
+        <VerySpecialHello message={`Grafana UI Components library`} />
       </Modal>
     </Stack>
   );

@@ -1,5 +1,3 @@
-// Simple Hello Component
-
 import React, { type PropsWithChildren, type ReactElement } from "react";
 
 type Props = {
