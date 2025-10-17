@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "Grafana UI Experiments",
+  "homepage": "https://grafana.com",
+  "items": [
+    {
+      "name": "hello",
+      "title": "Hello",
+      "type": "registry:block",
+      "description": "A simple hello component.",
+      "files": [
+        {
+          "path": "src/ui/hello/hello.tsx",
+          "type": "registry:component"
+        }
+      ]
+    }
+  ]
+}

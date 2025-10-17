@@ -1,0 +1,29 @@
+{
+  "name": "@yesoreyeram/grafana-ui",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "registry:build": "shadcn build",
+    "dev": "next dev",
+    "build": "next build && yarn registry:build -o ./out/r",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "next": "15.5.6",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.6",
+    "shadcn": "^3.4.2",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
