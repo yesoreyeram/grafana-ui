@@ -7,10 +7,23 @@
       "name": "hello",
       "title": "Hello",
       "type": "registry:block",
-      "description": "A simple hello component.",
+      "description": "A simple hello component",
       "files": [
         {
-          "path": "src/ui/hello/hello.tsx",
+          "path": "src/components/hello/hello.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "special-hello",
+      "title": "SpecialHello",
+      "type": "registry:block",
+      "description": "A special hello component",
+      "registryDependencies": ["hello"],
+      "files": [
+        {
+          "path": "src/components/special-hello/special-hello.tsx",
           "type": "registry:component"
         }
       ]
