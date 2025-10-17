@@ -29,6 +29,23 @@
           "type": "registry:component"
         }
       ]
+    },
+    {
+      "name": "very-special-hello",
+      "title": "VerySpecialHello",
+      "type": "registry:block",
+      "description": "A very special hello component",
+      "registryDependencies": [
+        "http://yesoreyeram.github.io/grafana-ui/r/hello.json",
+        "http://yesoreyeram.github.io/grafana-ui/r/special-hello.json"
+      ],
+      "dependencies": ["upper-case"],
+      "files": [
+        {
+          "path": "src/components/very-special-hello/very-special-hello.tsx",
+          "type": "registry:component"
+        }
+      ]
     }
   ]
 }
