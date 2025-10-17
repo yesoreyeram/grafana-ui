@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "Grafana UI Experiments",
-  "homepage": "https://grafana.com",
+  "homepage": "http://yesoreyeram-github.io/grafana-ui",
   "items": [
     {
       "name": "hello",
@@ -20,7 +20,9 @@
       "title": "SpecialHello",
       "type": "registry:block",
       "description": "A special hello component",
-      "registryDependencies": ["hello"],
+      "registryDependencies": [
+        "http://yesoreyeram.github.io/grafana-ui/r/hello.json"
+      ],
       "files": [
         {
           "path": "src/components/special-hello/special-hello.tsx",
