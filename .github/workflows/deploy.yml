@@ -71,8 +71,8 @@ jobs:
           pattern: github-pages
       - name: List artifact items
         run: |
-          ls -R my-artifact
-          npx --yes http-server my-artifact -p 3456 > /tmp/http-server.log 2>&1 &
+          ls -R build-artifacts
+          npx --yes http-server build-artifacts -p 3456 > /tmp/http-server.log 2>&1 &
           SERVER_PID=$!
           sleep 3
           echo "Testing registry accessibility..."
@@ -82,10 +82,12 @@ jobs:
           npx @grafana/create-plugin@latest --pluginType datasource --hasBackend false --pluginName ui --orgName yesoreyeram && 
           cd yesoreyeram-ui-datasource &&
           rm src/module.ts &&
-          cp ../testing/module.tsx src/
+          cp ../testing/module.tsx.txt src/module.tsx
           cp ../testing/components.json .
-          cp ../testing/tsconfig.json .
-          cp ../testing/webpack.config.ts .
+          cp ../testing/tsconfig.json.txt ./tsconfig.json
+          cp ../testing/webpack.config.ts.txt ./webpack.config.ts
+          ls -Rl ./*.{json,config.ts}
+          ls -Rl ./src/*.{ts,tsx}
           npm install
           npx --yes shadcn@latest add http://localhost:3456/r/hello-grafana.json --overwrite --yes
           # Verify component was added correctly
