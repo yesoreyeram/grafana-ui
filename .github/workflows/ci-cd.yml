@@ -99,7 +99,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: plugin-build-artifacts
-          path: ./yesoreyeram-ui-datasource/dist
+          path: ./yesoreyeram-ui-datasource
       - name: Upload site build artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -120,17 +120,26 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: plugin-build-artifacts
-          path: ./grafana-plugins/yesoreyeram-ui-datasource
+          path: ./grafana-plugins
       - name: Verify plugin files
         run: |
+          echo "Listing grafana-plugins directory:"
+          ls -la ./grafana-plugins/
+          echo ""
           echo "Listing plugin directory contents:"
           ls -la ./grafana-plugins/yesoreyeram-ui-datasource/
           echo ""
           echo "Checking for required files:"
-          if [ -f "./grafana-plugins/yesoreyeram-ui-datasource/module.js" ]; then
-            echo "✓ module.js found"
+          if [ -f "./grafana-plugins/yesoreyeram-ui-datasource/src/plugin.json" ]; then
+            echo "✓ plugin.json found"
           else
-            echo "✗ module.js not found"
+            echo "✗ plugin.json not found"
+            exit 1
+          fi
+          if [ -f "./grafana-plugins/yesoreyeram-ui-datasource/dist/module.js" ]; then
+            echo "✓ module.js found in dist"
+          else
+            echo "✗ module.js not found in dist"
             exit 1
           fi
       - name: Start Grafana container
