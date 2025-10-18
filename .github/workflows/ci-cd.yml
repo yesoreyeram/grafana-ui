@@ -150,6 +150,7 @@ jobs:
             -e GF_AUTH_ANONYMOUS_ENABLED=true \
             -e GF_AUTH_ANONYMOUS_ORG_ROLE=Admin \
             -e GF_PATHS_PLUGINS=/var/lib/grafana/plugins \
+            -e GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=yesoreyeram-ui-datasource \
             -v $(pwd)/grafana-plugins:/var/lib/grafana/plugins \
             grafana/grafana-enterprise:latest
           
