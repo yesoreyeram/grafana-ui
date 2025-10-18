@@ -96,7 +96,7 @@ jobs:
           echo "Stopping the server & cleanup"
           kill $SERVER_PID || true
       - name: Upload plugin build artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: plugin-build-artifacts
           path: ./yesoreyeram-ui-datasource/dist
