@@ -96,7 +96,7 @@ jobs:
           echo "Stopping the server & cleanup"
           kill $SERVER_PID || true
       - name: Upload plugin build artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: plugin-build-artifacts
           path: ./yesoreyeram-ui-datasource/dist
@@ -105,6 +105,92 @@ jobs:
         with:
           name: build-artifacts
           path: ./out
+  test:
+    name: E2E Plugin Integration Test
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Download plugin artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: plugin-build-artifacts
+          path: ./grafana-plugins/yesoreyeram-ui-datasource
+      - name: Verify plugin files
+        run: |
+          echo "Listing plugin directory contents:"
+          ls -la ./grafana-plugins/yesoreyeram-ui-datasource/
+          echo ""
+          echo "Checking for required files:"
+          if [ -f "./grafana-plugins/yesoreyeram-ui-datasource/module.js" ]; then
+            echo "✓ module.js found"
+          else
+            echo "✗ module.js not found"
+            exit 1
+          fi
+      - name: Start Grafana container
+        run: |
+          docker run -d \
+            --name grafana \
+            -p 3000:3000 \
+            -e GF_DEFAULT_APP_MODE=development \
+            -e GF_AUTH_ANONYMOUS_ENABLED=true \
+            -e GF_AUTH_ANONYMOUS_ORG_ROLE=Admin \
+            -e GF_PATHS_PLUGINS=/var/lib/grafana/plugins \
+            -v $(pwd)/grafana-plugins:/var/lib/grafana/plugins \
+            grafana/grafana-enterprise:latest
+          
+          echo "Waiting for Grafana to start..."
+          max_attempts=60
+          attempt=0
+          while [ $attempt -lt $max_attempts ]; do
+            if curl -f http://localhost:3000/api/health 2>/dev/null; then
+              echo "Grafana is ready!"
+              break
+            fi
+            attempt=$((attempt + 1))
+            echo "Attempt $attempt/$max_attempts - waiting for Grafana..."
+            sleep 2
+          done
+          
+          if [ $attempt -eq $max_attempts ]; then
+            echo "Grafana failed to start in time"
+            docker logs grafana
+            exit 1
+          fi
+          
+          # Give it a bit more time to fully initialize
+          sleep 5
+          
+          # Verify plugin is loaded
+          echo "Checking if plugin is loaded..."
+          docker logs grafana | tail -50
+      - name: Install Playwright
+        run: |
+          npm install -D @playwright/test@latest --legacy-peer-deps
+          npx playwright install --with-deps chromium
+      - name: Run Playwright E2E tests
+        run: npx playwright test
+        env:
+          GRAFANA_URL: http://localhost:3000
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+      - name: Cleanup
+        if: always()
+        run: |
+          docker logs grafana || true
+          docker stop grafana || true
+          docker rm grafana || true
   deploy:
     name: Publish to Github Pages
     if: github.ref == 'refs/heads/main'
@@ -112,7 +198,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
+    needs: test
     steps:
       - name: Deploy to gitHub pages
         id: deployment
